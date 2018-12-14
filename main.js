@@ -2,7 +2,6 @@
 const {app, BrowserWindow} = require('electron')
 const fs = require('fs')
 const config = JSON.parse(fs.readFileSync('assets/config.json', 'utf8'))
-const remote = require("remote");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -19,14 +18,12 @@ function createWindow () {
     mainWindow.show()
   })
 
-  var windows = BrowserWindow.getAllWindows();
-
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
   if (config.devTools)
-    windows[1].openDevTools();
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
