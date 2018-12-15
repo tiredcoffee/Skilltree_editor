@@ -1,7 +1,7 @@
 {
-	"name": "some-text-rpg",
-	"version": "0.0.1",
-	"description": "A text rpg game",
+	"name": "Skilltree_editor",
+	"version": "0.1.0",
+	"description": "A skilltree editor for CrossCode",
 	"main": "main.js",
 	"scripts": {
 		"start": "electron ."
@@ -9,10 +9,11 @@
 	"repository": "",
 	"keywords": [
 		"Electron",
-		"Game",
-		"RPG",
-		"TextRPG",
-		"WIP"
+		"CrossCode",
+		"tool",
+		"mod",
+		"WIP",
+		"editor"
 	],
 	"author": "Coffee",
 	"license": "MIT",
@@ -20,7 +21,6 @@
 	"dependencies": {
 		"@types/nw.gui": "0.0.20",
 		"coffeescript": "^2.3.2",
-		"electron": "^3.0.7",
-		"remote": "^0.2.6"
+		"electron": "^3.0.7"
 	}
 }
