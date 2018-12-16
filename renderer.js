@@ -15,6 +15,30 @@ async function SuperDeletoById (time, id) {
   await Sleep (time);
   let element = document.getElementById(id);
   element.parentNode.removeChild(element);
+  console.log('Element deleted!');
+  console.log(element);
+}
+
+async function CreateNotification (message = ' ', time = 3000) {
+  let notifBox = document.createElement('div');
+  notifBox.setAttribute('class', 'notification');
+  notifBox.setAttribute('id', 'notifBox');
+  let animstate = document.createAttribute('animstate');
+  animstate.value = 'playing';
+  notifBox.setAttributeNode(animstate);
+
+  let span = document.createElement('span');
+  span.innerHTML = message;
+  notifBox.appendChild(span);
+  document.getElementById('main').appendChild(notifBox);
+  console.log('Notification created!');
+
+  time -= 3000
+  await Sleep(3000 * 0.75);
+  document.getElementById('notifBox').setAttribute('animstate', 'paused');
+  await Sleep (Math.floor(time));
+  document.getElementById('notifBox').setAttribute('animstate', 'playing');
+  SuperDeletoById(Math.floor(750), 'notifBox');
 }
 
 document.onreadystatechange = () => {
@@ -82,17 +106,7 @@ function ButtonClickEvents () {
         console.error(err);
         return;
       }
-      let notifBox = document.createElement('div');
-      notifBox.setAttribute('class', 'notification');
-      notifBox.setAttribute('id', 'notifBox');
-
-      let span = document.createElement('span');
-      span.innerHTML = 'Saved!';
-      notifBox.appendChild(span);
-
-      document.getElementById('main').appendChild(notifBox);
-
-      SuperDeletoById(3000, 'notifBox');
+      CreateNotification('Saved!', 3000);
     });
   });
 }

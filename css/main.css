@@ -228,3 +228,9 @@ p {
   75% {opacity: 1;}
   100% {opacity: 0;}
 }
+[animstate="paused"] {
+	animation-play-state: paused;
+}
+[animstate="playing"] {
+	animation-play-state: running;
+}

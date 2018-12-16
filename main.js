@@ -1,56 +1,69 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
-const fs = require('fs')
-const path = require('path')
-const config = JSON.parse(fs.readFileSync('assets/config.json', 'utf8'))
-var skilltree = JSON.parse(fs.readFileSync(path.join(config.assetsPath, 'data/skilltree.json'), 'utf8'))
+const {app, BrowserWindow} = require('electron');
+const fs = require('fs');
+const path = require('path');
+const config = JSON.parse(fs.readFileSync('assets/config.json', 'utf8'));
+var skilltree = JSON.parse(fs.readFileSync(path.join(config.assetsPath, 'data/skilltree.json'), 'utf8'));
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
+let devtools;
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     show: false,
     frame: false
-  })
-  mainWindow.setMenu(null)
+  });
+  mainWindow.setMenu(null);
+
+  devtools = new BrowserWindow({
+    show: false
+  });
+  mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
+
   mainWindow.once('ready-to-show', function () {
-    mainWindow.show()
-  })
+    devtools.show();
+    mainWindow.show();
+  });
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile('index.html');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null
-  })
+    devtools.close();
+    mainWindow = null;
+  });
+  devtools.on('closed', function () {
+    devtools = null;
+  });
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
-})
+});
 
 app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow()
+    createWindow();
   }
 })
 
