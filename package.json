@@ -21,6 +21,7 @@
 	"dependencies": {
 		"@types/nw.gui": "0.0.20",
 		"coffeescript": "^2.3.2",
-		"electron": "^3.0.7"
+		"electron": "^3.0.7",
+		"jquery": "^3.3.1"
 	}
 }

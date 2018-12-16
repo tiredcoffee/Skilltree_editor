@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const fs = require('fs')
-const path = require('path');
+const path = require('path')
 const config = JSON.parse(fs.readFileSync('assets/config.json', 'utf8'))
 var skilltree = JSON.parse(fs.readFileSync(path.join(config.assetsPath, 'data/skilltree.json'), 'utf8'))
 
