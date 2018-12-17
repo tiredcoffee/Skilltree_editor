@@ -104,8 +104,10 @@ function ButtonClickEvents () {
     fs.writeFile('./output/skilltree.json', JSON.stringify(skilltree), err => {
       if (err) {
         console.error(err);
+        CreateNotification('Save failed!');
         return;
       }
+
       CreateNotification('Saved!', 3000);
     });
   });
