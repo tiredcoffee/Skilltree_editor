@@ -7,8 +7,9 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <title>CrossCode Skilltree Editor</title>
     <link rel="stylesheet" href="./css/main.css">
+    <script>require('./renderer.js')</script>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
   </head>
-
   <body>
     <header id="titlebar">
       <div id="drag-region">
@@ -31,7 +32,6 @@
         </div>
       </div>
     </header>
-
     <div id="main">
       <h1 class="title">Skilltree</h1>
       <button class="button_1" id="save"><span>Save</span></button>
@@ -41,8 +41,5 @@
         </p>
       </div>
     </div>
-
-    <script>require('./renderer.js')</script>
-    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
   </body>
 </html>

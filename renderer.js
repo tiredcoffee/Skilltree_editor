@@ -3,42 +3,87 @@
 // All of the Node.js APIs are available in this process.
 const remote = require('electron').remote;
 const fs = require('fs');
-const path = require('path')
-const config = JSON.parse(fs.readFileSync('assets/config.json', 'utf8'))
-var skilltree = JSON.parse(fs.readFileSync(path.join(config.assetsPath, 'data/skilltree.json'), 'utf8'))
+const path = require('path');
+const config = JSON.parse(fs.readFileSync('assets/config.json', 'utf8'));
+var skilltree = JSON.parse(fs.readFileSync(path.join(config.assetsPath, 'data/skilltree.json'), 'utf8'));
+
+Element.prototype.remove = function() {
+  console.log("Element deleted!");
+  console.log(this);
+  this.parentElement.removeChild(this);
+}
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+  console.log("Element deleted!");
+  console.log(this);
+  for(var i = this.length - 1; i >= 0; i--) {
+    if(this[i] && this[i].parentElement) {
+      this[i].parentElement.removeChild(this[i]);
+    }
+  }
+}
+
+function animate({duration, draw, timing}) {
+
+  let start = performance.now();
+
+  requestAnimationFrame(function animate(time) {
+    let timeFraction = (time - start) / duration;
+    if (timeFraction > 1) timeFraction = 1;
+
+    let progress = timing(timeFraction)
+
+    draw(progress);
+
+    if (timeFraction < 1) {
+      requestAnimationFrame(animate);
+    }
+
+  });
+}
 
 function Sleep (milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
-async function SuperDeletoById (time, id) {
-  await Sleep (time);
-  let element = document.getElementById(id);
-  element.parentNode.removeChild(element);
-  console.log('Element deleted!');
-  console.log(element);
-}
-
+var IDCount = 0;
 async function CreateNotification (message = ' ', time = 3000) {
   let notifBox = document.createElement('div');
   notifBox.setAttribute('class', 'notification');
-  notifBox.setAttribute('id', 'notifBox');
-  let animstate = document.createAttribute('animstate');
-  animstate.value = 'playing';
-  notifBox.setAttributeNode(animstate);
+  let currentID = IDCount;
+  notifBox.setAttribute('id', 'notifBox' + IDCount++);
 
   let span = document.createElement('span');
   span.innerHTML = message;
+
   notifBox.appendChild(span);
   document.getElementById('main').appendChild(notifBox);
   console.log('Notification created!');
 
-  time -= 3000
-  await Sleep(3000 * 0.75);
-  document.getElementById('notifBox').setAttribute('animstate', 'paused');
-  await Sleep (Math.floor(time));
-  document.getElementById('notifBox').setAttribute('animstate', 'playing');
-  SuperDeletoById(Math.floor(750), 'notifBox');
+  notifBox = document.getElementById('notifBox' + currentID);
+
+  animate({
+    duration: time/2,
+    timing: function(timeFraction) {
+      // ease-out
+      return - timeFraction * (timeFraction - 2);
+    },
+    draw: function(progress) {
+      // start + progress (0-1) * destination
+      notifBox.style.top = - 100 + progress * 145 - 30 + 'px';
+    }
+  });
+  await Sleep(time * 0.75);
+  animate({
+    duration: time * 0.25,
+    timing: function(timeFraction) {
+      return 1 - timeFraction;
+    },
+    draw: function(progress) {
+      notifBox.style.opacity = progress;
+    }
+  });
+  await Sleep(time * 0.25);
+  notifBox.remove();
 }
 
 document.onreadystatechange = () => {
@@ -108,7 +153,7 @@ function ButtonClickEvents () {
         return;
       }
 
-      CreateNotification('Saved!', 3000);
+      CreateNotification('Saved!');
     });
   });
 }
