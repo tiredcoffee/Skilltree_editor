@@ -7,6 +7,13 @@ const path = require('path');
 const config = JSON.parse(fs.readFileSync('assets/config.json', 'utf8'));
 var skilltree = JSON.parse(fs.readFileSync(path.join(config.assetsPath, 'data/skilltree.json'), 'utf8'));
 
+document.onreadystatechange = () => {
+    if (document.readyState == 'complete') {
+      handleWindowControls();
+      ButtonClickEvents();
+    }
+}
+
 Element.prototype.remove = function() {
   console.log("Element deleted!");
   console.log(this);
@@ -69,7 +76,7 @@ async function CreateNotification (message = ' ', time = 3000) {
     },
     draw: function(progress) {
       // start + progress (0-1) * destination
-      notifBox.style.top = - 100 + progress * 145 - 30 + 'px';
+      notifBox.style.top = - 100 + progress * 120 + 'px';
     }
   });
   await Sleep(time * 0.75);
@@ -84,13 +91,6 @@ async function CreateNotification (message = ' ', time = 3000) {
   });
   await Sleep(time * 0.25);
   notifBox.remove();
-}
-
-document.onreadystatechange = () => {
-    if (document.readyState == 'complete') {
-      handleWindowControls();
-      ButtonClickEvents();
-    }
 }
 
 function handleWindowControls() {
